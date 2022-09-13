@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnExit = document.getElementById("btn-exit");
   const formCustomer = document.getElementById("form-customer");
 
+  const orders = [];
+
   customer.addEventListener("click", () => {
     blockChoice.style.display = "none";
     blockCustomer.style.display = "block";
@@ -26,5 +28,27 @@ document.addEventListener("DOMContentLoaded", () => {
     btnExit.style.display = "none";
     blockFreelance.style.display = "none";
     blockCustomer.style.display = "none";
+  });
+
+  formCustomer.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const obj = {};
+    debugger;
+    for (const elem of formCustomer.elements) {
+      if (
+        (elem.tagName === "INPUT" && elem.type !== "radio") ||
+        (elem.type === "radio" && elem.checked) ||
+        elem.tagName === "TEXTAREA"
+      ) {
+        console.dir(elem);
+        obj[elem.name] = elem.value;
+
+        if (elem.type) {
+          elem.value = "";
+        }
+      }
+    }
+    orders.push(obj);
   });
 });
