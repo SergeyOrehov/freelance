@@ -10,13 +10,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const formCustomer = document.getElementById("form-customer");
   const ordersTable = document.getElementById("orders");
 
+  const modalOrder = document.getElementById("order_read"),
+    modalOrderActive = document.getElementById("order_active");
+
   const orders = [];
 
   const renderOrders = () => {
     ordersTable.textContent = "";
     orders.forEach((order, i) => {
       ordersTable.innerHTML += `
-      <tr class="order" data-number-order>
+      <tr class="order" data-number-order = "${i}">
         <td>${i + 1}</td>
         <td>${order.title}</td>
         <td class="${order.currency}"></td>
@@ -25,11 +28,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const openModal = (numberOrder) => {
+    const order = orders[numberOrder];
+    const modal = order.active ? modalOrderActive : modalOrder;
+
+    const firstNameBlock = document.querySelector(".firstName"),
+      titleBlock = document.querySelector(".modal-title"),
+      emailBlock = document.querySelector(".email"),
+      descriptionBlock = document.querySelector(".description"),
+      deadlineBlock = document.querySelector(".deadline"),
+      currencyBlock = document.querySelector(".currency_img"),
+      countBlock = document.querySelector(".count"),
+      phoneBlock = document.querySelector(".phone");
+
+    titleBlock.textContent = order.title;
+
+    modal.style.display = "block";
+  };
+
   ordersTable.addEventListener("click", (event) => {
     const target = event.target;
-    console.log(target);
 
     const targetOrder = target.closest(".order");
+    if (targetOrder) {
+      openModal(targetOrder.dataset.numberOrder);
+    }
   });
 
   customer.addEventListener("click", () => {
