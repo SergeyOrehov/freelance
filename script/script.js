@@ -8,8 +8,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const blockChoice = document.getElementById("block-choice");
   const btnExit = document.getElementById("btn-exit");
   const formCustomer = document.getElementById("form-customer");
+  const ordersTable = document.getElementById("orders");
 
   const orders = [];
+
+  const renderOrders = () => {
+    ordersTable.textContent = "";
+    orders.forEach((order, i) => {
+      ordersTable.innerHTML += `
+      <tr class="order" data-number-order>
+        <td>${i + 1}</td>
+        <td>${order.title}</td>
+        <td class="${order.currency}"></td>
+        <td>${order.deadline}</td>
+      </tr>`;
+    });
+  };
+
+  ordersTable.addEventListener("click", (event) => {
+    const target = event.target;
+    console.log(target);
+
+    const targetOrder = target.closest(".order");
+  });
 
   customer.addEventListener("click", () => {
     blockChoice.style.display = "none";
@@ -19,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   freelancer.addEventListener("click", () => {
     blockChoice.style.display = "none";
+    renderOrders();
     blockFreelance.style.display = "block";
     btnExit.style.display = "block";
   });
@@ -34,21 +56,18 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     const obj = {};
-    debugger;
     for (const elem of formCustomer.elements) {
       if (
         (elem.tagName === "INPUT" && elem.type !== "radio") ||
         (elem.type === "radio" && elem.checked) ||
         elem.tagName === "TEXTAREA"
       ) {
-        console.dir(elem);
         obj[elem.name] = elem.value;
-
-        if (elem.type) {
-          elem.value = "";
-        }
       }
     }
+
+    formCustomer.reset();
     orders.push(obj);
+    console.log(orders);
   });
 });
