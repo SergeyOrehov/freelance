@@ -20,8 +20,26 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const calcDeadline = (deadline) => {
-    const day = null;
-    return day;
+    const currentDate = Date.now();
+    const deadlineDate = Date.parse(deadline);
+    const days = Math.floor((deadlineDate - currentDate) / 1000 / 3600 / 24);
+    return days + " " + getNoun(days);
+  };
+
+  const getNoun = (number) => {
+    let n = Math.abs(number);
+    n %= 100;
+    if (n >= 5 && n <= 20) {
+      return "дней";
+    }
+    n %= 10;
+    if (n === 1) {
+      return "день";
+    }
+    if (n >= 2 && n <= 4) {
+      return "дня";
+    }
+    return "дней";
   };
 
   const renderOrders = () => {
@@ -34,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${i + 1}</td>
         <td>${order.title}</td>
         <td class="${order.currency}"></td>
-        <td>${order.deadline}</td>
+        <td>${calcDeadline(order.deadline)}</td>
       </tr>`;
     });
   };
