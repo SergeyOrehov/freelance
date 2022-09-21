@@ -23,23 +23,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentDate = Date.now();
     const deadlineDate = Date.parse(deadline);
     const days = Math.floor((deadlineDate - currentDate) / 1000 / 3600 / 24);
-    return days + " " + getNoun(days);
+    if (deadlineDate - currentDate < 0) {
+      return "через минуту у вас";
+    }
+    if (days <= 0) {
+      const hours = Math.floor((deadlineDate - currentDate) / 1000 / 3600);
+      return hours + " " + getNoun(hours, ["часов", "час", "часа"]);
+    }
+    return days + " " + getNoun(days, ["дней", "день", "дня"]);
   };
 
-  const getNoun = (number) => {
+  const getNoun = (number, arr) => {
     let n = Math.abs(number);
     n %= 100;
     if (n >= 5 && n <= 20) {
-      return "дней";
+      return arr[0];
     }
     n %= 10;
     if (n === 1) {
-      return "день";
+      return arr[1];
     }
     if (n >= 2 && n <= 4) {
-      return "дня";
+      return arr[2];
     }
-    return "дней";
+    return arr[0];
   };
 
   const renderOrders = () => {
@@ -120,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     emailBlock.textContent = email;
     emailBlock.href = "mailto:" + email;
     descriptionBlock.textContent = description;
-    deadlineBlock.textContent = deadline;
+    deadlineBlock.textContent = calcDeadline(deadline);
     currencyBlock.classList = "currency_img";
     currencyBlock.classList.add(currency);
     countBlock.textContent = amount;
@@ -142,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   customer.addEventListener("click", () => {
     blockChoice.style.display = "none";
+    const toDay = new Date().toISOString().substring(0, 10);
+    document.getElementById("deadline").min = toDay;
     blockCustomer.style.display = "block";
     btnExit.style.display = "block";
   });
