@@ -23,13 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentDate = Date.now();
     const deadlineDate = Date.parse(deadline);
     const days = Math.floor((deadlineDate - currentDate) / 1000 / 3600 / 24);
-    if (deadlineDate - currentDate < 0) {
-      return "через минуту у вас";
-    }
-    if (days <= 0) {
-      const hours = Math.floor((deadlineDate - currentDate) / 1000 / 3600);
+    console.log(days);
+    console.log((deadlineDate - currentDate) / 1000 / 3600 / 24);
+
+    if ((deadlineDate - currentDate) / 1000 / 3600 < 24) {
+      const hours = Math.abs(
+        Math.floor((deadlineDate - currentDate) / 1000 / 3600)
+      );
       return hours + " " + getNoun(hours, ["часов", "час", "часа"]);
     }
+
     return days + " " + getNoun(days, ["дней", "день", "дня"]);
   };
 
